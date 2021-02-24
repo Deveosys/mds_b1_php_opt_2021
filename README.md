@@ -85,3 +85,70 @@ public function decreaseStock() {
     $this->stock = $this->stock - 1;
 }
 ```
+
+## Constructeur
+
+Pour chaque classe on peut définir un contructeur. C'est une méthode de la classe qui a __obligatoirement__ pour nom `__construct`.
+
+```php
+public function __construct() {}
+```
+
+Le constructeur peut avoir des paramètre qui doivent être passés lors de l'instanciation d'un objet de cette classe : 
+
+```php
+public function __construct(string $name) {
+    $this->setName($name);
+}
+
+...
+
+$character = new Character("Jean");
+
+```
+
+## La visibilité
+
+La notion de visibilité permet de définir l'accès aux membres de la classe (propriété / méthodes).
+
+`public` : le membre est accessible à l'extérieur de la classe. C'est à dire depuis l'objet.
+
+`private` : le membre n'est accessible seulement à l'intérieur de la classe avec le mot-clé `$this`
+
+Par convention, on préfix les membres privés de classe par un underscore
+```php
+private $_name;
+private $_life = 100;
+
+public $age;
+```
+
+## Notion d'encapsulation
+
+Grace à la visibilité, on peut masquer certaines partie de notre code à l'utilisateur. 
+
+Ici l'utilisateur est la personne qui va utiliser notre code, et non la personne qui utilisera l'application.
+
+Il est souvent inutile voire dangereux que l'utilisateur ai accès à notre code. La plupart du temps il n'a pas besoin de savoir comment ça marche exactement, et encore moins de le modifier et risquer des effets de bord.
+
+Par convention on utilise systématiquement des accesseurs pour manipuler les propriétés d'un objet. On parle de `getters` et `setters` : 
+
+```
+class Product {
+    private $_name;
+
+    ...
+
+    public function setName(string $name): void {
+        $this->_name = $name;
+    }
+
+    public function getName(): string {
+        $this->_name = $name;
+    }
+}
+```
+
+## Les ID
+
+Les objets qui seront stockés plus tard en base de données possèdent toujours un ID unique. C'est une propriété de la classe.

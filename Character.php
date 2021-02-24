@@ -6,20 +6,34 @@
 class Character
 {
     /**
+     * Character's id
+     *
+     * @var int
+     */
+    private $_id;
+
+    /**
+     * Character's name
+     *
+     * @var string
+     */
+    private $_name;
+
+    /**
      * HP amount of the character
      * When life is 0, character is dead
      * A character starts with 100 HP
      *
      * @var int
      */
-    public $life = 100;
+    private $_life = 100;
 
-    /**
-     * Power of the character
-     *
-     * @var int
-     */
-    public $power;
+    // /**
+    //  * Power of the character
+    //  *
+    //  * @var int
+    //  */
+    // public $power;
 
     /**
      * Life represents HP
@@ -27,7 +41,53 @@ class Character
      *
      * @var int
      */
-    public $mana = 100;
+    private $_mana = 100;
+
+    public function __construct(int $id, string $name)
+    {
+        $this->setId($id);
+        $this->setName($name);
+    }
+
+    public function getId(): int
+    {
+        return $this->_id;
+    }
+
+    public function setId(int $id)
+    {
+        $this->_id = $id;
+    }
+
+    public function getName(): string
+    {
+        return $this->_name;
+    }
+
+    public function setName(string $name)
+    {
+        $this->_name = $name;
+    }
+
+    public function getLife(): int
+    {
+        return $this->_life;
+    }
+
+    public function setLife(string $life)
+    {
+        $this->__life = $life;
+    }
+
+    public function getMana(): int
+    {
+        return $this->_mana;
+    }
+
+    public function setMana(string $mana)
+    {
+        $this->_mana = $mana;
+    }
 
 
     /**
@@ -105,4 +165,3 @@ class Character
         }
     }
 }
-

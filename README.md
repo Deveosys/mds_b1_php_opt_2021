@@ -152,3 +152,111 @@ class Product {
 ## Les ID
 
 Les objets qui seront stockés plus tard en base de données possèdent toujours un ID unique. C'est une propriété de la classe.
+
+## Header
+
+On peut rediriger l'utilisateur grâce à l'intruction `header`.
+C'est pratique par exemple pour rediriger l'utilisateur sur la page login tempts qu'il n'est pas connecté. __Il faut arrêter l'exécution du script qui appelle `header` tout de suite après avec `exit`__
+
+```php
+header('Location: login.php');
+exit;
+```
+
+## Passage par référence
+
+Lorsqu'on passe une variable en paramètre d'une fonction, celle-ci est passé par valeur. C'est à dir qu'on envoie la valeur de la variable dans la fonction mais qu'après léxecution de la fonction, la variable reste inchangée : 
+
+```php
+function addOne(int $idParam) {
+    $idParam = $idParam + 1;
+}
+
+$id = 1; // la valeur de $id est 1
+
+addOne($id); // On passe $id comme paramètre de la fonctionne addOne
+
+// après l'éxécution de addOne, ici la valeur de $id vaut toujours 1
+echo $id // => 1
+```
+
+Si on déclare l'argument `$idParam` comme recevant une référence avec l'opérateeur `&`, la valeur de la variable passée en paramètre sera modifiée : 
+
+```php
+function addOne(int &$idParam) { // Ici notez la présence du &
+    $idParam = $idParam + 1;
+}
+
+$id = 1; // la valeur de $id est 1
+
+addOne($id); // On passe $id comme paramètre de la fonctionne addOne
+
+// après l'éxécution de addOne, ici la valeur de $id est maintenant 2
+echo $id // => 2
+```
+
+## Les try catch
+
+Les objets renvoient des erreurs de type `Exception`. Lorsqu'une `Exception` est levée (`throw` en anglais), le programme s'arrête.
+Il est possible d'intercepter ces erreurs grâce à l'utilisation de `try / catch` afin de géré nous-même ce qui doit ce passer en fonction de l'erreur.
+
+```php
+try {
+    // ... notre code ici
+} catch (Exception $e) {
+    // Lorsqu'une Exception est levée durant l'éxecution du code présent dans le bloock try,
+    // le programme s'arrête dans le try et passe dans le catch, avec l'exception qui à été levée en paramètre
+    echo 'Exception reçue : '.  $e->getMessage();
+}
+```
+
+## PDO et les try / catch
+
+Le catch d'exception est très utilise dans l'utilisatin de PDO puisque celui-ci est un objet.
+On placera toujours nos instruction relatives à PDO dans un try / catch : 
+
+```php
+try {
+    $pdo = new PDO($dsn, $user, $password);
+    $stmt = $pdo->query("SELECT * FROM movies");
+    // ... suite des instructions PDO
+} catch (\PDOException $e) {
+    echo 'Erreur avec PDO : ' . $e->getMessage();
+}
+```
+
+## BDD avec PDO : INSERT avec paramètres
+
+Pour passer des paramètres à une requête `ÌNSERT` on utilise la méthode `prepare` de pdo en plaçant autant de `?` que de paramètres qu'on a besoin de passer, puis on __bind__ les paramètres avec la méthode `bindParam` de pdo. __les valeurs des paramètres DOIVENT être stockées dans des variables avant d'être passées à la méthode `bindParam`__.
+Ensuite on appelle la méthode `execute` pour éxécuter la reequête en base.
+
+
+```php
+$title = "James Bond";
+$tmdbId = 4;
+$overview = "Résumé du film";
+$image = "image.jpg";
+
+$stmt = $pdo->prepare("INSERT INTO movies (title, tmdb_id, overview, poster) VALUES (?, ?, ?, ?)");
+$stmt->bindParam(1, $title);
+$stmt->bindParam(2, $tmdbId);
+$stmt->bindParam(3, $overview);
+$stmt->bindParam(4, $image);
+$stmt->execute();
+```
+
+## BDD avec PDO : SELECT avec paramètres
+
+Pour passer des paramètres à une requête `SELECT` / `WHERE` on utilise également la méthode `prepare` de pdo en plaçant des `?` après les `=`.
+Les paramètres sont passés à la fonction `execute` de pdo dans un tableau, en respectant l'ordre de la requête (ici `tmbd_id` puis `title`).
+
+```php
+$stmt = $pdo->prepare("SELECT * FROM movies WHERE tmdb=? AND title=?");
+
+$tmdb = 5678;
+$title = "Martine aux fraises";
+$parameters = [$tmdb, $title];
+
+$stmt->execute($parameters); 
+$movie = $stmt->fetch();
+```

@@ -156,7 +156,7 @@ Les objets qui seront stockés plus tard en base de données possèdent toujours
 ## Header
 
 On peut rediriger l'utilisateur grâce à l'intruction `header`.
-C'est pratique par exemple pour rediriger l'utilisateur sur la page login tempts qu'il n'est pas connecté. __Il faut arrêter l'exécution du script qui appelle `header` tout de suite après avec `exit`__
+C'est pratique par exemple pour rediriger l'utilisateur sur la page login tant qu'il n'est pas connecté. __Il faut arrêter l'exécution du script qui appelle `header` tout de suite après avec `exit`__
 
 ```php
 header('Location: login.php');

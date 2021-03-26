@@ -260,3 +260,17 @@ $parameters = [$tmdb, $title];
 $stmt->execute($parameters); 
 $movie = $stmt->fetch();
 ```
+
+## Exception PDO
+
+Pour être sûr d'intercepter toutes les erreurs PDO dans le catch, il faut dire à PDO de gérer ses erreur comme des exceptions : 
+
+```php
+try {
+    $pdo = new PDO($dsn, $user, $password);
+    $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    // ... suite des instructions PDO
+} catch (\PDOException $e) {
+    echo 'Erreur avec PDO : ' . $e->getMessage();
+}
+```
